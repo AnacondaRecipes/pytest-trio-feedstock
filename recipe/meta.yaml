@@ -11,15 +11,17 @@ source:
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
-  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  skip: True # [py<37]
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
+    - wheel
+    - setuptools
   run:
-    - python >=3.7
+    - python
     - pytest >=7.2.0
     - trio >=0.22.0
     - outcome >=1.1.0
@@ -27,6 +29,10 @@ requirements:
 test:
   imports:
     - pytest_trio
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
   home: https://github.com/python-trio/pytest-trio
@@ -34,6 +40,8 @@ about:
   license_family: MIT
   license_file: LICENSE.MIT
   summary: This is a pytest plugin to help you test projects that use Trio, a friendly library for concurrency and async I/O in Python
+  description: |
+    This is a pytest plugin to help you test projects that use Trio, a friendly library for concurrency and async I/O in Python.
   doc_url: https://pytest-trio.readthedocs.io
   dev_url: https://github.com/python-trio/pytest-trio
 
